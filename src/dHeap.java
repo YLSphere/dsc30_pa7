@@ -6,7 +6,7 @@
 import java.util.*;
 
 /**
- * TODO
+ * Creates a min/max array heap with a custom branching factor and size
  * 
  * @param <T> Generic type
  */
