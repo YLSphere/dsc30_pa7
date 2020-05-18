@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T> {
 
-    public T[] heap; // heap array
+    private T[] heap; // heap array
     private int d; // branching factor
     private int nelems; // number of elements
     private boolean isMaxHeap; // boolean to indicate whether heap is max or min
@@ -64,11 +64,20 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
         this.d = d;
     }
 
+    /**
+     * Returns the current size of the heap
+     */
     @Override
     public int size() {
         return nelems;
     }
 
+    /**
+     * Adds an element into the heap
+     *
+     * @param data data to be added
+     * @throws NullPointerException if data is null
+     */
     @Override
     public void add(T data) throws NullPointerException {
         if (data == null) {
@@ -83,10 +92,15 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
             }
             heap[nelems] = data;
             nelems++;
-            bubbleUp(nelems-1);
+            bubbleUp(nelems - 1);
         }
     }
 
+    /**
+     * Removes the root element from the heap
+     *
+     * @throws NoSuchElementException if the heap if empty
+     */
     @Override
     public T remove() throws NoSuchElementException {
         if (nelems == 0) {
@@ -101,6 +115,9 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
         return temp;
     }
 
+    /**
+     * Clears the heap
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void clear() {
@@ -110,6 +127,9 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
         nelems = 0;
     }
 
+    /**
+     * Peeks the root element of the heap
+     */
     public T element() throws NoSuchElementException {
         if (nelems == 0) {
             throw new NoSuchElementException();
@@ -117,6 +137,11 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
         return heap[0];
     }
 
+    /**
+     * Compares the element at given index with its children and moves it downwards depending on the heap type
+     *
+     * @param index index of element
+     */
     private void trickleDown(int index) {
         ArrayList<T> children = new ArrayList<>();
 
@@ -125,7 +150,7 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
                 if (((index * d) + n) > heap.length) {
                     continue;
                 }
-                if ( heap[(index * d) + n] != null) {
+                if (heap[(index * d) + n] != null) {
                     children.add(heap[(index * d) + n]);
                 }
             }
@@ -148,7 +173,7 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
             if (heap[index].compareTo(maxValue) > 0) {
                 return;
             }
-            if(heap[index].compareTo(maxValue) <= 0) {
+            if (heap[index].compareTo(maxValue) <= 0) {
                 T temp = heap[index];
                 heap[index] = maxValue;
                 heap[(index * d) + newIndex] = temp;
@@ -159,7 +184,7 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
                 if (((index * d) + n) >= heap.length) {
                     continue;
                 }
-                if ( heap[(index * d) + n] != null) {
+                if (heap[(index * d) + n] != null) {
                     children.add(heap[(index * d) + n]);
                 }
             }
@@ -182,7 +207,7 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
             if (heap[index].compareTo(minValue) < 0) {
                 return;
             }
-            if(heap[index].compareTo(minValue) >= 0) {
+            if (heap[index].compareTo(minValue) >= 0) {
                 T temp = heap[index];
                 heap[index] = minValue;
                 heap[(index * d) + newIndex] = temp;
@@ -191,6 +216,11 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
         }
     }
 
+    /**
+     * Compares the element at given index with its parent and moves it upwards depending on the heap type
+     *
+     * @param index index of element
+     */
     private void bubbleUp(int index) {
         if (isMaxHeap) {
             while (heap[parent(index)].compareTo(heap[index]) < 0) {
@@ -209,6 +239,9 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
         }
     }
 
+    /**
+     * Doubles the size of the array
+     */
     @SuppressWarnings("unchecked")
     private void resize() {
         T[] temp = (T[]) new Comparable[ nelems * RESIZE_FACTOR];
@@ -217,7 +250,11 @@ public class dHeap<T extends Comparable<? super T>> implements dHeapInterface<T>
         }
         heap = temp;
     }
-
+    /**
+     * Returns the parent index of an element
+     *
+     * @param index index of element
+     */
     private int parent(int index) {
         return (index - 1) / d;
     }
